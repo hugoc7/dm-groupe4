@@ -16,8 +16,10 @@ class TaskListAdapter(private val taskList: List<Task>) :
         fun bind(task: Task) {
             itemView.apply {
                 val textView  = itemView.findViewById<TextView>(R.id.task_title)
+                val descriptionView  = itemView.findViewById<TextView>(R.id.task_description)
                 val deleteButton = itemView.findViewById<ImageButton>(R.id.delete_button)
                 textView.text = task.title
+                descriptionView.text = task.description
                 deleteButton.setOnClickListener { taskView ->
                     onDeleteClickListener(taskView)
                 }
