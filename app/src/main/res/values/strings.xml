@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TodoPaulZixuanHugo</string>
+    <string name="delete">Supprimer</string>
+    <string name="no_description_available">No description available</string>
 </resources>
