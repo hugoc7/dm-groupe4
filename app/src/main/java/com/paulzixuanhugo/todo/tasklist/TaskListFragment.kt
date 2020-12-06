@@ -34,13 +34,14 @@ class TaskListFragment : Fragment() {
     {
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        recyclerView.adapter = TaskListAdapter(taskList)
+        val myAdapter = TaskListAdapter(taskList)
+        recyclerView.adapter = myAdapter
 
         val fab = view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
         fab.setOnClickListener{
             val newTask = Task(id = UUID.randomUUID().toString(), title = "Task ${taskList.size + 1}")
             taskList.add(newTask)
-            TaskListAdapter(taskList).notifyDataSetChanged()
+            myAdapter.notifyDataSetChanged()
         }
     }
 }
