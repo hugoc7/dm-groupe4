@@ -20,16 +20,16 @@ class TaskListAdapter(private val taskList: List<Task>) :
                 val deleteButton = itemView.findViewById<ImageButton>(R.id.delete_button)
                 textView.text = task.title
                 descriptionView.text = task.description
-                deleteButton.setOnClickListener { taskView ->
-                    onDeleteClickListener(taskView)
+                deleteButton.setOnClickListener {
+                    onDeleteClickListener?.invoke(task)
                 }
             }
         }
     }
-    //var onDeleteClickListener: ((Task) -> Unit)? = null
-    fun onDeleteClickListener(taskView: View ) {
-        print("\nDeleting task.")
-    }
+    var onDeleteClickListener: ((Task) -> Unit)? = null
+    //fun onDeleteClickListener(taskView: View ) {
+     //   print("\nDeleting task.")
+    //}
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_task, parent, false)
         return TaskViewHolder(itemView)

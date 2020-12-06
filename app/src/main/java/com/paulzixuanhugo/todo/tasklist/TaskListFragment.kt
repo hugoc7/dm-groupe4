@@ -43,5 +43,12 @@ class TaskListFragment : Fragment() {
             taskList.add(newTask)
             myAdapter.notifyDataSetChanged()
         }
+
+        // "implémentation" de la lambda dans le fragment:
+        myAdapter.onDeleteClickListener = { task ->
+            // Supprimer la tâche
+            taskList.remove(task)
+            myAdapter.notifyDataSetChanged()
+        }
     }
 }
