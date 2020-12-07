@@ -61,7 +61,10 @@ class TaskListFragment : Fragment() {
         val fab = view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
         fab.setOnClickListener{
             val newTask = Task(id = UUID.randomUUID().toString(), title = "Task ${taskList.size + 1}", description = "no description")
-            taskList.add(newTask)
+            lifecycleScope.launch {
+                tasksRepository.createTaskOnline(newTask)
+                tasksRepository.refresh()
+            }
             myAdapter.notifyDataSetChanged()
         }
 

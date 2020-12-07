@@ -3,6 +3,8 @@ package com.paulzixuanhugo.todo.network
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.paulzixuanhugo.todo.tasklist.Task
+import retrofit2.Response
+import retrofit2.http.*
 
 class TasksRepository {
     private val tasksWebService = Api.tasksWebService
@@ -25,5 +27,18 @@ class TasksRepository {
                 _taskList.value = fetchedTasks!!
             }
         }
+    }
+
+    suspend fun createTaskOnline(task: Task){
+        tasksWebService.createTask(task)
+    }
+
+    suspend fun updateTask(task:Task) {
+        val response = tasksWebService.updateTask(task)
+        val editableList = _taskList.value.orEmpty().toMutableList()
+        val position = editableList.indexOfFirst { task.id == it.id }
+        if (response != null)
+            editableList[position] = response.body()!!
+        _taskList.value = editableList
     }
 }
