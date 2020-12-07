@@ -10,5 +10,5 @@ data class Task(
     @SerialName("title")
     val title: String,
     @SerialName("description")
-    val description: String
-)
+    val description: String = "no desc"
+) : java.io.Serializable

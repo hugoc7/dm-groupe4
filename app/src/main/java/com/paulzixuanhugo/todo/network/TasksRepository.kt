@@ -32,6 +32,7 @@ class TasksRepository {
 
     suspend fun createTaskOnline(task: Task){
         tasksWebService.createTask(task)
+        refresh()
     }
 
     suspend fun updateTask(task:Task) {
@@ -49,14 +50,4 @@ class TasksRepository {
             _taskList.value = _taskList.value?.filter { it.id != id }
         }
     }
-
-/*
-    suspend fun updateTask(task: Task) {
-
-        val editedTask = tasksWebService.updateTask(task)
-        val editableList = _taskList.value.orEmpty().toMutableList()
-        val position = editableList.indexOfFirst { task.id == it.id }
-        editableList[position] = editedTask
-        _taskList.value = editableList
-    }*/
 }

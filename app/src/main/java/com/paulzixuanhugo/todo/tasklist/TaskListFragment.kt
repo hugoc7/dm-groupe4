@@ -1,5 +1,6 @@
 package com.paulzixuanhugo.todo.tasklist
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Debug
 import android.util.Log
@@ -19,11 +20,12 @@ import kotlinx.coroutines.launch
 import org.w3c.dom.Text
 import java.util.*
 import androidx.lifecycle.Observer
+import com.paulzixuanhugo.todo.tasklist.task.TaskActivity
+
 
 class TaskListFragment : Fragment() {
 
     private val tasksRepository = TasksRepository()
-
 
     private val taskList = mutableListOf(
             Task(id = "id_1", title = "Task 1", description = "no description"),
@@ -60,12 +62,13 @@ class TaskListFragment : Fragment() {
 
         val fab = view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
         fab.setOnClickListener{
-            val newTask = Task(id = UUID.randomUUID().toString(), title = "Task ${taskList.size + 1}", description = "no description")
-            lifecycleScope.launch {
-                tasksRepository.createTaskOnline(newTask)
-                tasksRepository.refresh()
-            }
-            myAdapter.notifyDataSetChanged()
+            val intent = Intent(activity, TaskActivity::class.java)
+            startActivityForResult(intent, TaskActivity.ADD_TASK_REQUEST_CODE)
+            //val newTask = Task(id = UUID.randomUUID().toString(), title = "Task ${taskList.size + 1}", description = "no description")
+ //           lifecycleScope.launch {
+  //              tasksRepository.createTaskOnline(newTask)
+    //            tasksRepository.refresh()
+       //     }
         }
 
         // Dans onViewCreated()
@@ -84,5 +87,13 @@ class TaskListFragment : Fragment() {
                 tasksRepository.delete(task.id)
             }
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        val newTask = data!!.getSerializableExtra(TaskActivity.TASK_KEY) as Task
+        lifecycleScope.launch {
+            tasksRepository.createTaskOnline(newTask)
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 }
