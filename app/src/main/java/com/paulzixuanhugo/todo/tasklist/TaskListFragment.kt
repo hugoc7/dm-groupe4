@@ -14,11 +14,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.paulzixuanhugo.todo.R
 import com.paulzixuanhugo.todo.network.Api
+import com.paulzixuanhugo.todo.network.TasksRepository
 import kotlinx.coroutines.launch
 import org.w3c.dom.Text
 import java.util.*
+import androidx.lifecycle.Observer
 
 class TaskListFragment : Fragment() {
+
+    private val tasksRepository = TasksRepository()
+
 
     private val taskList = mutableListOf(
             Task(id = "id_1", title = "Task 1", description = "no description"),
@@ -27,12 +32,17 @@ class TaskListFragment : Fragment() {
     )
 
     override fun onResume() {
+        super.onResume()
+
         lifecycleScope.launch {
             val userInfo = Api.userService.getInfo().body()!!
             val myTitle = view?.findViewById<TextView>(R.id.textView3)
             myTitle?.text = "${userInfo.firstName} ${userInfo.lastName}"
         }
-        super.onResume()
+        // Dans onResume()
+        lifecycleScope.launch {
+            tasksRepository.refresh()
+        }
     }
 
     override fun onCreateView(
@@ -57,6 +67,13 @@ class TaskListFragment : Fragment() {
             taskList.add(newTask)
             myAdapter.notifyDataSetChanged()
         }
+
+        // Dans onViewCreated()
+        tasksRepository.taskList.observe(viewLifecycleOwner, Observer {
+            taskList.clear()
+            taskList.addAll(it)
+            myAdapter.notifyDataSetChanged()
+        })
 
         // "implémentation" de la lambda dans le fragment:
         myAdapter.onDeleteClickListener = { task ->

@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.paulzixuanhugo.todo.R
 
-class TaskListAdapter(private val taskList: List<Task>) :
+class TaskListAdapter(val taskList: List<Task>) :
     RecyclerView.Adapter<TaskListAdapter.TaskViewHolder>() {
 
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
