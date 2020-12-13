@@ -18,15 +18,20 @@ class TaskListAdapter(val taskList: List<Task>) :
                 val textView  = itemView.findViewById<TextView>(R.id.task_title)
                 val descriptionView  = itemView.findViewById<TextView>(R.id.task_description)
                 val deleteButton = itemView.findViewById<ImageButton>(R.id.delete_button)
+                val editButton = itemView.findViewById<ImageButton>(R.id.edit_button)
                 textView.text = task.title
                 descriptionView.text = task.description
                 deleteButton.setOnClickListener {
                     onDeleteClickListener?.invoke(task)
                 }
+                editButton.setOnClickListener {
+                    onEditClickListener?.invoke(task)
+                }
             }
         }
     }
     var onDeleteClickListener: ((Task) -> Unit)? = null
+    var onEditClickListener: ((Task) -> Unit)? = null
     //fun onDeleteClickListener(taskView: View ) {
      //   print("\nDeleting task.")
     //}

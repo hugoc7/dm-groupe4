@@ -11,20 +11,32 @@ import com.paulzixuanhugo.todo.tasklist.Task
 import java.util.UUID
 
 class TaskActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.task_activity)
+        val newTitle = this.findViewById<TextInputEditText>(R.id.titleInput)
+        val newDesc  = this.findViewById<TextInputEditText>(R.id.descriptionInput)
+
+
+        val taskToEdit = intent.getSerializableExtra(TASK_KEY) as? Task
+
+
+        if (taskToEdit != null) {
+            newTitle.setText(taskToEdit.title)
+            newDesc.setText(taskToEdit.description)
+        }
+
 
         val valider = this.findViewById<Button>(R.id.valider)
         valider.setOnClickListener {
 
-            val newTitle = this.findViewById<TextInputEditText>(R.id.titleInput).text
-            val newDesc = this.findViewById<TextInputEditText>(R.id.descriptionInput).text
+            val newTask = Task(
+                    id = taskToEdit?.id ?: UUID.randomUUID().toString(),
+                    title = newTitle.text.toString(),
+                    description = newDesc.text.toString())
 
-            val newTask = Task(id = UUID.randomUUID().toString(), title = newTitle.toString(), description = newDesc.toString())
-
-            intent.putExtra(TASK_KEY,newTask)
-
+            intent.putExtra(TASK_KEY, newTask)
             setResult(Activity.RESULT_OK,intent)
             finish()
         }
@@ -33,6 +45,7 @@ class TaskActivity : AppCompatActivity() {
 
     companion object {
         const val ADD_TASK_REQUEST_CODE = 666
+        const val EDIT_TASK_REQUEST_CODE = 667
         const val TASK_KEY = "cle"
     }
 }
