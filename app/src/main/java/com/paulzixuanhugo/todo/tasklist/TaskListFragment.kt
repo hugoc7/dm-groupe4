@@ -65,7 +65,6 @@ class TaskListFragment : Fragment() {
 
         viewModel.taskList.observe(viewLifecycleOwner, Observer { newList ->
             myAdapter.taskList = newList.orEmpty()
-            myAdapter.notifyDataSetChanged()
         })
 
         myAdapter.onDeleteClickListener = { task ->

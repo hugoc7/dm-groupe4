@@ -8,11 +8,15 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.paulzixuanhugo.todo.R
+import kotlin.properties.Delegates
 
 class TaskListAdapter() :
     RecyclerView.Adapter<TaskListAdapter.TaskViewHolder>() {
 
-    var taskList: List<Task> = emptyList()
+    // On initialise la tasklist de façon à ce que l'adapter se notifie automatiquement lui même à chaque fois qu'on modifie la liste:
+    var taskList: List<Task> by Delegates.observable(emptyList()) { _, _, _ ->
+        notifyDataSetChanged()
+    }
 
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(task: Task) {
