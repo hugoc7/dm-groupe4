@@ -42,7 +42,6 @@ class TasksRepository {
 
     suspend fun delete(id: String) {
         val tasksResponse = tasksWebService.deleteTask(id)
-        refresh()
 
         // Solution alternative pour eviter de refresh, a mettre a jour avec la nouvelle archi
         /*if (tasksResponse.isSuccessful) {

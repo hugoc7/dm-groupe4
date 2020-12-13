@@ -23,7 +23,12 @@ class TaskListViewModel : ViewModel() {
             _taskList.value = repository.refresh()
         }
     }
-    fun deleteTask(task: Task) {}
+    fun deleteTask(task: Task) {
+        viewModelScope.launch {
+            repository.delete(task.id)
+        }
+        refreshTasks()
+    }
     fun addTask(task: Task) {}
     fun editTask(task: Task) {}
 }

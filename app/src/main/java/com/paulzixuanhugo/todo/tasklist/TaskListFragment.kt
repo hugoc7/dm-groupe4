@@ -46,7 +46,7 @@ class TaskListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        viewModel.refreshTasks()
         return inflater.inflate(R.layout.fragment_task_list, container, false)
     }
 
@@ -59,7 +59,6 @@ class TaskListFragment : Fragment() {
 
         val fab = view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
         fab.setOnClickListener{
-            viewModel.refreshTasks()
             //val intent = Intent(activity, TaskActivity::class.java)
             //startActivityForResult(intent, TaskActivity.ADD_TASK_REQUEST_CODE)
         }
@@ -71,7 +70,7 @@ class TaskListFragment : Fragment() {
 
         myAdapter.onDeleteClickListener = { task ->
             lifecycleScope.launch {
-                tasksRepository.delete(task.id)
+                viewModel.deleteTask(task)
             }
         }
     }
