@@ -73,12 +73,22 @@ class TaskListFragment : Fragment() {
                 viewModel.deleteTask(task)
             }
         }
+        myAdapter.onEditClickListener = { task ->
+            val intent = Intent(activity, TaskActivity::class.java)
+            intent.putExtra(TaskActivity.TASK_KEY, task)
+            startActivityForResult(intent, TaskActivity.EDIT_TASK_REQUEST_CODE)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val newTask = data!!.getSerializableExtra(TaskActivity.TASK_KEY) as Task
+        val task = data!!.getSerializableExtra(TaskActivity.TASK_KEY) as Task
         lifecycleScope.launch {
-            tasksRepository.createTaskOnline(newTask)
+            if(requestCode == TaskActivity.ADD_TASK_REQUEST_CODE) {
+                tasksRepository.createTaskOnline(task)
+            }
+            else if (requestCode == TaskActivity.EDIT_TASK_REQUEST_CODE) {
+                tasksRepository.updateTask(task)
+            }
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
