@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -57,10 +58,22 @@ class TaskListFragment : Fragment() {
         val myAdapter = TaskListAdapter()
         recyclerView.adapter = myAdapter
 
+        val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            val task = it.data!!.getSerializableExtra(TaskActivity.TASK_KEY) as Task
+            lifecycleScope.launch {
+                if(it.resultCode == TaskActivity.ADD_TASK_REQUEST_CODE) {
+                    viewModel.addTask(task)
+                }
+                else if (it.resultCode == TaskActivity.EDIT_TASK_REQUEST_CODE) {
+                    viewModel.editTask(task)
+                }
+            }
+        }
+
         val fab = view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
         fab.setOnClickListener{
             val intent = Intent(activity, TaskActivity::class.java)
-            startActivityForResult(intent, TaskActivity.ADD_TASK_REQUEST_CODE)
+            startForResult.launch(intent)
         }
 
         viewModel.taskList.observe(viewLifecycleOwner, Observer { newList ->
@@ -76,20 +89,7 @@ class TaskListFragment : Fragment() {
         myAdapter.onEditClickListener = { task ->
             val intent = Intent(activity, TaskActivity::class.java)
             intent.putExtra(TaskActivity.TASK_KEY, task)
-            startActivityForResult(intent, TaskActivity.EDIT_TASK_REQUEST_CODE)
+            startForResult.launch(intent)
         }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val task = data!!.getSerializableExtra(TaskActivity.TASK_KEY) as Task
-        lifecycleScope.launch {
-            if(requestCode == TaskActivity.ADD_TASK_REQUEST_CODE) {
-                viewModel.addTask(task)
-            }
-            else if (requestCode == TaskActivity.EDIT_TASK_REQUEST_CODE) {
-                viewModel.editTask(task)
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 }

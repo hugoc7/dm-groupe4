@@ -20,9 +20,10 @@ class TaskActivity : AppCompatActivity() {
 
 
         val taskToEdit = intent.getSerializableExtra(TASK_KEY) as? Task
-
+        var resultCode = ADD_TASK_REQUEST_CODE
 
         if (taskToEdit != null) {
+            resultCode = EDIT_TASK_REQUEST_CODE
             newTitle.setText(taskToEdit.title)
             newDesc.setText(taskToEdit.description)
         }
@@ -37,7 +38,7 @@ class TaskActivity : AppCompatActivity() {
                     description = newDesc.text.toString())
 
             intent.putExtra(TASK_KEY, newTask)
-            setResult(Activity.RESULT_OK,intent)
+            setResult(resultCode, intent)
             finish()
         }
 
