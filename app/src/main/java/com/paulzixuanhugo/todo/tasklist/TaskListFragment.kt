@@ -21,17 +21,14 @@ import org.w3c.dom.Text
 import java.util.*
 import androidx.lifecycle.Observer
 import com.paulzixuanhugo.todo.tasklist.task.TaskActivity
+import androidx.fragment.app.viewModels
 
 
 class TaskListFragment : Fragment() {
 
     private val tasksRepository = TasksRepository()
 
-    private val taskList = mutableListOf(
-            Task(id = "id_1", title = "Task 1", description = "no description"),
-            Task(id = "id_2", title = "Task 2", description = "no description"),
-            Task(id = "id_3", title = "Task 3", description = "no description")
-    )
+    private val viewModel by viewModels<TaskListViewModel>()
 
     override fun onResume() {
         super.onResume()
@@ -40,7 +37,7 @@ class TaskListFragment : Fragment() {
             val userInfo = Api.userService.getInfo().body()!!
             val myTitle = view?.findViewById<TextView>(R.id.textView3)
             myTitle?.text = "${userInfo.firstName} ${userInfo.lastName}"
-            tasksRepository.refresh()
+            //tasksRepository.refresh()
         }
     }
 
@@ -57,32 +54,22 @@ class TaskListFragment : Fragment() {
     {
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        val myAdapter = TaskListAdapter(taskList)
+        val myAdapter = TaskListAdapter()
         recyclerView.adapter = myAdapter
 
         val fab = view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
         fab.setOnClickListener{
-            val intent = Intent(activity, TaskActivity::class.java)
-            startActivityForResult(intent, TaskActivity.ADD_TASK_REQUEST_CODE)
-            //val newTask = Task(id = UUID.randomUUID().toString(), title = "Task ${taskList.size + 1}", description = "no description")
- //           lifecycleScope.launch {
-  //              tasksRepository.createTaskOnline(newTask)
-    //            tasksRepository.refresh()
-       //     }
+            viewModel.refreshTasks()
+            //val intent = Intent(activity, TaskActivity::class.java)
+            //startActivityForResult(intent, TaskActivity.ADD_TASK_REQUEST_CODE)
         }
 
-        // Dans onViewCreated()
-        tasksRepository.taskList.observe(viewLifecycleOwner, Observer {
-            taskList.clear()
-            taskList.addAll(it)
+        viewModel.taskList.observe(viewLifecycleOwner, Observer { newList ->
+            myAdapter.taskList = newList.orEmpty()
             myAdapter.notifyDataSetChanged()
         })
 
-        // "implémentation" de la lambda dans le fragment:
         myAdapter.onDeleteClickListener = { task ->
-            //taskList.remove(task)
-            //myAdapter.notifyDataSetChanged()
-            // Supprimer la tâche
             lifecycleScope.launch {
                 tasksRepository.delete(task.id)
             }
