@@ -34,9 +34,7 @@ class TaskListAdapter() :
     }
     var onDeleteClickListener: ((Task) -> Unit)? = null
     var onEditClickListener: ((Task) -> Unit)? = null
-    //fun onDeleteClickListener(taskView: View ) {
-     //   print("\nDeleting task.")
-    //}
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_task, parent, false)
         return TaskViewHolder(itemView)
