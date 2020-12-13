@@ -28,7 +28,6 @@ class TasksRepository {
 
     suspend fun createTaskOnline(task: Task){
         tasksWebService.createTask(task)
-        refresh()
     }
 
     suspend fun updateTask(task:Task) {

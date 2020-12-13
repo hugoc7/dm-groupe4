@@ -37,7 +37,7 @@ class TaskListFragment : Fragment() {
             val userInfo = Api.userService.getInfo().body()!!
             val myTitle = view?.findViewById<TextView>(R.id.textView3)
             myTitle?.text = "${userInfo.firstName} ${userInfo.lastName}"
-            //tasksRepository.refresh()
+            tasksRepository.refresh()
         }
     }
 
@@ -59,8 +59,8 @@ class TaskListFragment : Fragment() {
 
         val fab = view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
         fab.setOnClickListener{
-            //val intent = Intent(activity, TaskActivity::class.java)
-            //startActivityForResult(intent, TaskActivity.ADD_TASK_REQUEST_CODE)
+            val intent = Intent(activity, TaskActivity::class.java)
+            startActivityForResult(intent, TaskActivity.ADD_TASK_REQUEST_CODE)
         }
 
         viewModel.taskList.observe(viewLifecycleOwner, Observer { newList ->
@@ -84,10 +84,10 @@ class TaskListFragment : Fragment() {
         val task = data!!.getSerializableExtra(TaskActivity.TASK_KEY) as Task
         lifecycleScope.launch {
             if(requestCode == TaskActivity.ADD_TASK_REQUEST_CODE) {
-                tasksRepository.createTaskOnline(task)
+                viewModel.addTask(task)
             }
             else if (requestCode == TaskActivity.EDIT_TASK_REQUEST_CODE) {
-                tasksRepository.updateTask(task)
+                viewModel.editTask(task)
             }
         }
         super.onActivityResult(requestCode, resultCode, data)

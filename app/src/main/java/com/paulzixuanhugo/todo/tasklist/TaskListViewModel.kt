@@ -26,9 +26,19 @@ class TaskListViewModel : ViewModel() {
     fun deleteTask(task: Task) {
         viewModelScope.launch {
             repository.delete(task.id)
+            refreshTasks()
         }
-        refreshTasks()
     }
-    fun addTask(task: Task) {}
-    fun editTask(task: Task) {}
+    fun addTask(task: Task) {
+        viewModelScope.launch {
+            repository.createTaskOnline(task)
+            refreshTasks()
+        }
+    }
+    fun editTask(task: Task) {
+        viewModelScope.launch {
+            repository.updateTask(task)
+            refreshTasks()
+        }
+    }
 }
