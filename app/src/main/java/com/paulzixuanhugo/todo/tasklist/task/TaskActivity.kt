@@ -1,6 +1,7 @@
 package com.paulzixuanhugo.todo.tasklist.task
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -18,10 +19,13 @@ class TaskActivity : AppCompatActivity() {
         val newTitle = this.findViewById<EditText>(R.id.titleInput)
         val newDesc  = this.findViewById<EditText>(R.id.descriptionInput)
 
-
         val taskToEdit = intent.getSerializableExtra(TASK_KEY) as? Task
+        val textToAdd = intent.getSerializableExtra(TEXT_KEY) as? String
         var resultCode = ADD_TASK_REQUEST_CODE
 
+        if (textToAdd != null) {
+            newDesc.setText(textToAdd)
+        }
         if (taskToEdit != null) {
             resultCode = EDIT_TASK_REQUEST_CODE
             newTitle.setText(taskToEdit.title)
@@ -48,6 +52,7 @@ class TaskActivity : AppCompatActivity() {
         const val ADD_TASK_REQUEST_CODE = 666
         const val EDIT_TASK_REQUEST_CODE = 667
         const val TASK_KEY = "cle"
+        const val TEXT_KEY = "text"
     }
 }
 

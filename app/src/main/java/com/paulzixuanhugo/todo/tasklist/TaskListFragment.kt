@@ -1,6 +1,8 @@
 package com.paulzixuanhugo.todo.tasklist
 
 import android.content.Intent
+import android.content.Intent.getIntent
+import android.content.Intent.makeMainActivity
 import android.os.Bundle
 import android.os.Debug
 import android.util.Log
@@ -8,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -23,6 +26,7 @@ import java.util.*
 import androidx.lifecycle.Observer
 import com.paulzixuanhugo.todo.tasklist.task.TaskActivity
 import androidx.fragment.app.viewModels
+import com.paulzixuanhugo.todo.MainActivity
 
 
 class TaskListFragment : Fragment() {
@@ -30,6 +34,7 @@ class TaskListFragment : Fragment() {
     private val tasksRepository = TasksRepository()
 
     private val viewModel by viewModels<TaskListViewModel>()
+
 
     override fun onResume() {
         super.onResume()
@@ -53,12 +58,16 @@ class TaskListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?)
     {
+        val mainActivity = activity as MainActivity
+
+
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         val myAdapter = TaskListAdapter()
         recyclerView.adapter = myAdapter
 
-        val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+
+        val addOrEditTask = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             val task = it.data!!.getSerializableExtra(TaskActivity.TASK_KEY) as Task
             lifecycleScope.launch {
                 if(it.resultCode == TaskActivity.ADD_TASK_REQUEST_CODE) {
@@ -69,11 +78,20 @@ class TaskListFragment : Fragment() {
                 }
             }
         }
+        //receive text intent from another application
+        if(mainActivity.intent?.action == Intent.ACTION_SEND) {
+            if ("text/plain" == mainActivity.intent.type) {
+                val text = mainActivity.intent.getStringExtra(Intent.EXTRA_TEXT).toString()
+                val intent = Intent(activity, TaskActivity::class.java)
+                intent.putExtra(TaskActivity.TEXT_KEY, text)
+                addOrEditTask.launch(intent)
+            }
+        }
 
         val fab = view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
         fab.setOnClickListener{
             val intent = Intent(activity, TaskActivity::class.java)
-            startForResult.launch(intent)
+            addOrEditTask.launch(intent)
         }
 
         viewModel.taskList.observe(viewLifecycleOwner, Observer { newList ->
@@ -89,7 +107,16 @@ class TaskListFragment : Fragment() {
         myAdapter.onEditClickListener = { task ->
             val intent = Intent(activity, TaskActivity::class.java)
             intent.putExtra(TaskActivity.TASK_KEY, task)
-            startForResult.launch(intent)
+            addOrEditTask.launch(intent)
+        }
+        myAdapter.onLongClickListener = { task ->
+            val sendIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, task.title)
+                type = "text/plain"
+            }
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            startActivity(shareIntent)
         }
     }
 }
