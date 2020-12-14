@@ -15,29 +15,37 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/editTitle"
+        <TextView
+            android:id="@+id/textView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Titre" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/titleInput"
-                android:layout_width="137dp"
-                android:layout_height="wrap_content"
-                android:hint="Title" />
-        </com.google.android.material.textfield.TextInputLayout>
+        <EditText
+            android:id="@+id/titleInput"
+            android:layout_width="137dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Name" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/editDescription"
+        <TextView
+            android:id="@+id/textView2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Description" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/descriptionInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Description" />
-        </com.google.android.material.textfield.TextInputLayout>
+        <EditText
+            android:id="@+id/descriptionInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:gravity="start|top"
+            android:inputType="textMultiLine" />
 
     </LinearLayout>
 
