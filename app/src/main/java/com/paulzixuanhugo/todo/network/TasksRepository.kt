@@ -23,7 +23,7 @@ class TasksRepository {
     }
 
     suspend fun updateTask(task:Task) {
-        val response = tasksWebService.updateTask(task)
+        tasksWebService.updateTask(task)
 
         // Solution alternative pour eviter de refresh, a mettre a jour avec la nouvelle archi
         /*val editableList = viewModel.taskList.value.orEmpty().toMutableList()
@@ -34,7 +34,7 @@ class TasksRepository {
     }
 
     suspend fun delete(id: String) {
-        val tasksResponse = tasksWebService.deleteTask(id)
+        tasksWebService.deleteTask(id)
 
         // Solution alternative pour eviter de refresh, a mettre a jour avec la nouvelle archi
         /*if (tasksResponse.isSuccessful) {

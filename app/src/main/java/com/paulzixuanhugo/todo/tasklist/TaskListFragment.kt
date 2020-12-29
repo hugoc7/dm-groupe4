@@ -121,7 +121,7 @@ class TaskListFragment : Fragment() {
             startActivity(shareIntent)
         }
 
-        val myImage = view?.findViewById<ImageView>(R.id.imageView)
+        val myImage = view.findViewById<ImageView>(R.id.imageView)
         myImage.setOnClickListener() {
             val intent = Intent(activity, UserInfoActivity::class.java)
             startActivity(intent)
