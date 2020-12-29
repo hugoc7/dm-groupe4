@@ -1,6 +1,8 @@
 package com.paulzixuanhugo.todo.network
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.paulzixuanhugo.todo.authentication.LoginForm
+import com.paulzixuanhugo.todo.authentication.LoginResponse
 import com.paulzixuanhugo.todo.tasklist.Task
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -57,6 +59,8 @@ object Api {
 interface UserService {
     @GET("users/info")
     suspend fun getInfo(): Response<UserInfo>
+    @POST("users/login")
+    suspend fun login(@Body user: LoginForm): Response<LoginResponse>
 }
 
 interface TasksWebService {
