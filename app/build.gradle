@@ -75,4 +75,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
     compileOnly 'com.google.android.wearable:wearable:2.6.0'
+
+    //Coil
+    implementation("io.coil-kt:coil:1.1.0")
 }
