@@ -1,32 +1,29 @@
 package com.paulzixuanhugo.todo.tasklist
 
 import android.content.Intent
-import android.content.Intent.getIntent
-import android.content.Intent.makeMainActivity
 import android.os.Bundle
-import android.os.Debug
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.paulzixuanhugo.todo.MainActivity
 import com.paulzixuanhugo.todo.R
 import com.paulzixuanhugo.todo.network.Api
 import com.paulzixuanhugo.todo.network.TasksRepository
-import kotlinx.coroutines.launch
-import org.w3c.dom.Text
-import java.util.*
-import androidx.lifecycle.Observer
 import com.paulzixuanhugo.todo.tasklist.task.TaskActivity
-import androidx.fragment.app.viewModels
-import com.paulzixuanhugo.todo.MainActivity
+import com.paulzixuanhugo.todo.userinfo.UserInfoActivity
+import kotlinx.coroutines.launch
 
 
 class TaskListFragment : Fragment() {
@@ -44,6 +41,12 @@ class TaskListFragment : Fragment() {
             val myTitle = view?.findViewById<TextView>(R.id.textView3)
             myTitle?.text = "${userInfo.firstName} ${userInfo.lastName}"
             tasksRepository.refresh()
+            val myImage = view?.findViewById<ImageView>(R.id.imageView)
+            if (userInfo.avatar != null) {
+                myImage?.load(userInfo.avatar) { transformations(CircleCropTransformation()) }
+            } else {
+                myImage?.load("https://i.imgur.com/Fy4YqZg.png") { transformations(CircleCropTransformation()) } //Avatar par défaut
+            }
         }
     }
 
@@ -116,6 +119,12 @@ class TaskListFragment : Fragment() {
             }
             val shareIntent = Intent.createChooser(sendIntent, null)
             startActivity(shareIntent)
+        }
+
+        val myImage = view?.findViewById<ImageView>(R.id.imageView)
+        myImage.setOnClickListener() {
+            val intent = Intent(activity, UserInfoActivity::class.java)
+            startActivity(intent)
         }
     }
 }

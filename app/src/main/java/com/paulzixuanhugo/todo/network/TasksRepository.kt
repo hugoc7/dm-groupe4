@@ -1,14 +1,6 @@
 package com.paulzixuanhugo.todo.network
 
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.paulzixuanhugo.todo.tasklist.Task
-import com.paulzixuanhugo.todo.tasklist.TaskListViewModel
-import androidx.fragment.app.viewModels
-
-import retrofit2.Response
-import retrofit2.http.*
 
 
 class TasksRepository {
@@ -49,4 +41,5 @@ class TasksRepository {
             _taskList.value = _taskList.value?.filter { it.id != id }
         }*/
     }
+
 }

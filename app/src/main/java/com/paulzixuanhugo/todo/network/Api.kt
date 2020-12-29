@@ -6,6 +6,7 @@ import com.paulzixuanhugo.todo.authentication.LoginResponse
 import com.paulzixuanhugo.todo.tasklist.Task
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -75,4 +76,8 @@ interface TasksWebService {
 
     @PATCH("tasks/{id}")
     suspend fun updateTask(@Body task: Task, @Path("id") id: String? = task.id): Response<Task>
+
+    @Multipart
+    @PATCH("users/update_avatar")
+    suspend fun updateAvatar(@Part avatar: MultipartBody.Part): Response<UserInfo>
 }
