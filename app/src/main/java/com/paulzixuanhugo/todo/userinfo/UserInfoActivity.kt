@@ -14,7 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.paulzixuanhugo.todo.R
-import com.paulzixuanhugo.todo.network.Api.tasksWebService
+import com.paulzixuanhugo.todo.network.Api
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -82,7 +82,7 @@ class UserInfoActivity : AppCompatActivity() {
 
     private fun handleImage(photoUri: Uri) {
         lifecycleScope.launch {
-            tasksWebService.updateAvatar(convert(photoUri))
+            Api.INSTANCE.tasksWebService.updateAvatar(convert(photoUri))
         }
     }
 }
