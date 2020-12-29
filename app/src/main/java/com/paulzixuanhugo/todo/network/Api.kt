@@ -6,6 +6,8 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.paulzixuanhugo.todo.SHARED_PREF_TOKEN_KEY
 import com.paulzixuanhugo.todo.authentication.LoginForm
 import com.paulzixuanhugo.todo.authentication.LoginResponse
+import com.paulzixuanhugo.todo.authentication.SignUpForm
+import com.paulzixuanhugo.todo.authentication.SignUpResponse
 import com.paulzixuanhugo.todo.tasklist.Task
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -70,6 +72,8 @@ interface UserService {
     suspend fun getInfo(): Response<UserInfo>
     @POST("users/login")
     suspend fun login(@Body user: LoginForm): Response<LoginResponse>
+    @POST("users/sign_up")
+    suspend fun signup(@Body user: SignUpForm): Response<SignUpResponse>
 }
 
 interface TasksWebService {
