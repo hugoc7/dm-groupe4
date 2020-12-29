@@ -35,7 +35,7 @@ class LoginFragment : Fragment() {
         val emailInput = view.findViewById<EditText>(R.id.input_email)
         val passwordInput = view.findViewById<EditText>(R.id.input_password)
         val loginButton = view.findViewById<Button>(R.id.button_login)
-        val userWebService = Api.userService
+        val userWebService = Api.INSTANCE.userService
         loginButton.setOnClickListener {
             val email = emailInput.text.toString()
             val password = passwordInput.text.toString()

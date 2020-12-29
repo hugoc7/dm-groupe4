@@ -12,7 +12,7 @@ import retrofit2.http.*
 
 
 class TasksRepository {
-    private val tasksWebService = Api.tasksWebService
+    private val tasksWebService = Api.INSTANCE.tasksWebService
 
 
 
