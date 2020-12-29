@@ -23,6 +23,7 @@ import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
+import com.paulzixuanhugo.todo.network.UserInfo
 
 class UserInfoActivity : AppCompatActivity() {
 
