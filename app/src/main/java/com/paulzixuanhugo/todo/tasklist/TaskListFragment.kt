@@ -37,7 +37,7 @@ class TaskListFragment : Fragment() {
         super.onResume()
 
         lifecycleScope.launch {
-            val userInfo = Api.userService.getInfo().body()!!
+            val userInfo = Api.INSTANCE.userService.getInfo().body()!!
             val myTitle = view?.findViewById<TextView>(R.id.textView3)
             myTitle?.text = "${userInfo.firstName} ${userInfo.lastName}"
             tasksRepository.refresh()

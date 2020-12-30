@@ -1,8 +1,13 @@
 package com.paulzixuanhugo.todo.network
 
+import android.content.Context
+import androidx.preference.PreferenceManager
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.paulzixuanhugo.todo.SHARED_PREF_TOKEN_KEY
 import com.paulzixuanhugo.todo.authentication.LoginForm
 import com.paulzixuanhugo.todo.authentication.LoginResponse
+import com.paulzixuanhugo.todo.authentication.SignUpForm
+import com.paulzixuanhugo.todo.authentication.SignUpResponse
 import com.paulzixuanhugo.todo.tasklist.Task
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -12,11 +17,16 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.http.*
 
-object Api {
+class Api(private val context: Context) {
+    companion object {
+        // constantes qui serviront à faire les requêtes
+        private const val BASE_URL = "https://android-tasks-api.herokuapp.com/api/"
+        lateinit var INSTANCE: Api
+    }
 
-    // constantes qui serviront à faire les requêtes
-    private const val BASE_URL = "https://android-tasks-api.herokuapp.com/api/"
-    private const val TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyOTEsImV4cCI6MTYzODg4NTMxM30.IsKZls3JNNmqnof5KvkSsbAA_jCWa_5C4Vz3UkLQ_s0"
+    fun getToken () : String? {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(SHARED_PREF_TOKEN_KEY, "")
+    }
 
     // on construit une instance de parseur de JSON:
     private val jsonSerializer = Json {
@@ -34,7 +44,7 @@ object Api {
                 .addInterceptor { chain ->
                     // intercepteur qui ajoute le `header` d'authentification avec votre token:
                     val newRequest = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer $TOKEN")
+                            .addHeader("Authorization", "Bearer ${getToken()}")
                             .build()
                     chain.proceed(newRequest)
                 }
@@ -62,6 +72,8 @@ interface UserService {
     suspend fun getInfo(): Response<UserInfo>
     @POST("users/login")
     suspend fun login(@Body user: LoginForm): Response<LoginResponse>
+    @POST("users/sign_up")
+    suspend fun signup(@Body user: SignUpForm): Response<SignUpResponse>
 }
 
 interface TasksWebService {

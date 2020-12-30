@@ -5,7 +5,7 @@
     android:id="@+id/frameLayout3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".authentication.SignupFragment" >
+    tools:context=".authentication.SignUpFragment" >
 
     <EditText
         android:id="@+id/input_email"
@@ -19,7 +19,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.542"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lastname_input" />
+        app:layout_constraintTop_toBottomOf="@+id/input_lastname" />
 
     <EditText
         android:id="@+id/input_password"
@@ -48,7 +48,7 @@
         app:layout_constraintTop_toBottomOf="@+id/input_password" />
 
     <Button
-        android:id="@+id/button_login"
+        android:id="@+id/button_signup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="48dp"
@@ -59,7 +59,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/firstname_input"
+        android:id="@+id/input_firstname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="112dp"
@@ -72,7 +72,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/lastname_input"
+        android:id="@+id/input_lastname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -82,5 +82,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.542"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/firstname_input" />
+        app:layout_constraintTop_toBottomOf="@+id/input_firstname" />
 </androidx.constraintlayout.widget.ConstraintLayout>

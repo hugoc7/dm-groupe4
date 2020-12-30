@@ -11,13 +11,11 @@ import android.widget.Toast
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
 import androidx.preference.PreferenceManager
 import com.paulzixuanhugo.todo.MainActivity
 import com.paulzixuanhugo.todo.R
 import com.paulzixuanhugo.todo.SHARED_PREF_TOKEN_KEY
 import com.paulzixuanhugo.todo.network.Api
-import com.paulzixuanhugo.todo.tasklist.task.TaskActivity
 import kotlinx.coroutines.launch
 
 
@@ -34,8 +32,8 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val emailInput = view.findViewById<EditText>(R.id.input_email)
         val passwordInput = view.findViewById<EditText>(R.id.input_password)
-        val loginButton = view.findViewById<Button>(R.id.button_login)
-        val userWebService = Api.userService
+        val loginButton = view.findViewById<Button>(R.id.button_signup)
+        val userWebService = Api.INSTANCE.userService
         loginButton.setOnClickListener {
             val email = emailInput.text.toString()
             val password = passwordInput.text.toString()

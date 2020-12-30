@@ -4,7 +4,7 @@ import com.paulzixuanhugo.todo.tasklist.Task
 
 
 class TasksRepository {
-    private val tasksWebService = Api.tasksWebService
+    private val tasksWebService = Api.INSTANCE.tasksWebService
 
 
 
