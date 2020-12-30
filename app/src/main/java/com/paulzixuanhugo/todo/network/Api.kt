@@ -67,35 +67,3 @@ class Api(private val context: Context) {
         retrofit.create(TasksWebService::class.java)
     }
 }
-
-interface UserService {
-    @GET("users/info")
-    suspend fun getInfo(): Response<UserInfo>
-
-    @POST("users/login")
-    suspend fun login(@Body user: LoginForm): Response<LoginResponse>
-
-    @POST("users/sign_up")
-    suspend fun signup(@Body user: SignUpForm): Response<SignUpResponse>
-
-    @Multipart
-    @PATCH("users/update_avatar")
-    suspend fun updateAvatar(@Part avatar: MultipartBody.Part): Response<UserInfo>
-
-    @PATCH("users")
-    suspend fun update(@Body user: UserInfo): Response<UserInfo>
-}
-
-interface TasksWebService {
-    @GET("tasks")
-    suspend fun getTasks(): Response<List<Task>>
-
-    @DELETE("tasks/{id}")
-    suspend fun deleteTask(@Path("id") id: String?): Response<String>
-
-    @POST("tasks")
-    suspend fun createTask(@Body task: Task): Response<Task>
-
-    @PATCH("tasks/{id}")
-    suspend fun updateTask(@Body task: Task, @Path("id") id: String? = task.id): Response<Task>
-}
