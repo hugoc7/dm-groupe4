@@ -47,19 +47,23 @@ class SignUpFragment : Fragment() {
             if (email != "" && password != "" && confirmPassword != "" && firstname != "" && lastname != "")
             {
                 if (password == confirmPassword) {
-                    val signupForm = SignUpForm(firstname, lastname, email, password, confirmPassword)
-                    lifecycleScope.launch {
-                        val res = userWebService.signup(signupForm)
-                        if (res.isSuccessful) {
-                            val token = res.body()?.token
-                            PreferenceManager.getDefaultSharedPreferences(context).edit {
-                                putString(SHARED_PREF_TOKEN_KEY, token)
-                            }
-                            val intent = Intent(activity, MainActivity::class.java)
-                            startActivity(intent)
-                        } else
-                            Toast.makeText(context, "Problème lors de la demande de sign up !", Toast.LENGTH_LONG).show()
+                    if (password.length > 5) {
+                        val signupForm = SignUpForm(firstname, lastname, email, password, confirmPassword)
+                        lifecycleScope.launch {
+                            val res = userWebService.signup(signupForm)
+                            if (res.isSuccessful) {
+                                val token = res.body()?.token
+                                PreferenceManager.getDefaultSharedPreferences(context).edit {
+                                    putString(SHARED_PREF_TOKEN_KEY, token)
+                                }
+                                val intent = Intent(activity, MainActivity::class.java)
+                                startActivity(intent)
+                            } else
+                                Toast.makeText(context, "Problème lors de la demande de sign up !", Toast.LENGTH_LONG).show()
+                        }
                     }
+                    else
+                        Toast.makeText(context, "Les mots de passe doivent contenir au moins 6 charactères !", Toast.LENGTH_LONG).show()
                 }
                 else
                     Toast.makeText(context, "Les mots de passe doivent correspondre !", Toast.LENGTH_LONG).show()
