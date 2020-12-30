@@ -4,19 +4,10 @@ import android.content.Context
 import androidx.preference.PreferenceManager
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.paulzixuanhugo.todo.SHARED_PREF_TOKEN_KEY
-import com.paulzixuanhugo.todo.authentication.LoginForm
-import com.paulzixuanhugo.todo.authentication.LoginResponse
-import com.paulzixuanhugo.todo.authentication.SignUpForm
-import com.paulzixuanhugo.todo.authentication.SignUpResponse
-import com.paulzixuanhugo.todo.task.Task
-import com.paulzixuanhugo.todo.userinfo.UserInfo
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
-import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.http.*
 
 class Api(private val context: Context) {
     companion object {
@@ -25,7 +16,7 @@ class Api(private val context: Context) {
         lateinit var INSTANCE: Api
     }
 
-    fun getToken () : String? {
+    fun getToken(): String? {
         return PreferenceManager.getDefaultSharedPreferences(context).getString(SHARED_PREF_TOKEN_KEY, "")
     }
 

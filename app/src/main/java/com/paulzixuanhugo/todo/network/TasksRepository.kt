@@ -7,7 +7,6 @@ class TasksRepository {
     private val tasksWebService = Api.INSTANCE.tasksWebService
 
 
-
     suspend fun refresh(): List<Task>? {
         // Call HTTP (opération longue):
         val tasksResponse = tasksWebService.getTasks()
@@ -18,7 +17,7 @@ class TasksRepository {
         return null
     }
 
-    suspend fun createTaskOnline(task: Task){
+    suspend fun createTaskOnline(task: Task) {
         tasksWebService.createTask(task)
     }
 

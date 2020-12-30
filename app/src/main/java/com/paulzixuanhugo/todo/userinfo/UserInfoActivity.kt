@@ -18,7 +18,6 @@ import coil.load
 import com.paulzixuanhugo.todo.BuildConfig
 import com.paulzixuanhugo.todo.R
 import com.paulzixuanhugo.todo.network.Api
-import com.paulzixuanhugo.todo.network.UserService
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody

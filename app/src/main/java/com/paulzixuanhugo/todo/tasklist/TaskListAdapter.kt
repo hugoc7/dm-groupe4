@@ -10,8 +10,8 @@ import com.paulzixuanhugo.todo.R
 import com.paulzixuanhugo.todo.task.Task
 import kotlin.properties.Delegates
 
-class TaskListAdapter() :
-    RecyclerView.Adapter<TaskListAdapter.TaskViewHolder>() {
+class TaskListAdapter :
+        RecyclerView.Adapter<TaskListAdapter.TaskViewHolder>() {
 
     // On initialise la tasklist de façon à ce que l'adapter se notifie automatiquement lui même à chaque fois qu'on modifie la liste:
     var taskList: List<Task> by Delegates.observable(emptyList()) { _, _, _ ->
@@ -21,8 +21,8 @@ class TaskListAdapter() :
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(task: Task) {
             itemView.apply {
-                val textView  = itemView.findViewById<TextView>(R.id.task_title)
-                val descriptionView  = itemView.findViewById<TextView>(R.id.task_description)
+                val textView = itemView.findViewById<TextView>(R.id.task_title)
+                val descriptionView = itemView.findViewById<TextView>(R.id.task_description)
                 val deleteButton = itemView.findViewById<ImageButton>(R.id.delete_button)
                 val editButton = itemView.findViewById<ImageButton>(R.id.edit_button)
                 textView.text = task.title
@@ -40,6 +40,7 @@ class TaskListAdapter() :
             }
         }
     }
+
     var onDeleteClickListener: ((Task) -> Unit)? = null
     var onEditClickListener: ((Task) -> Unit)? = null
     var onLongClickListener: ((Task) -> Unit)? = null

@@ -14,8 +14,9 @@ class TaskListViewModel : ViewModel() {
 
     // [_taskList] est modifiable mais privée donc inaccessible à l'extérieur de cette classe
     private val _taskList = MutableLiveData<List<Task>>()
+
     // [taskList] est publique mais non-modifiable: on pourra seulement l'observer (s'y abonner) depuis d'autres classes
-    public val taskList: LiveData<List<Task>> = _taskList
+    val taskList: LiveData<List<Task>> = _taskList
 
     private val repository = TasksRepository()
 
@@ -24,18 +25,21 @@ class TaskListViewModel : ViewModel() {
             _taskList.value = repository.refresh()
         }
     }
+
     fun deleteTask(task: Task) {
         viewModelScope.launch {
             repository.delete(task.id)
             refreshTasks()
         }
     }
+
     fun addTask(task: Task) {
         viewModelScope.launch {
             repository.createTaskOnline(task)
             refreshTasks()
         }
     }
+
     fun editTask(task: Task) {
         viewModelScope.launch {
             repository.updateTask(task)
