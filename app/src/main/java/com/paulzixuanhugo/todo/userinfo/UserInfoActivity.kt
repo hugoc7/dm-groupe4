@@ -18,6 +18,7 @@ import coil.load
 import com.paulzixuanhugo.todo.BuildConfig
 import com.paulzixuanhugo.todo.R
 import com.paulzixuanhugo.todo.network.Api
+import com.paulzixuanhugo.todo.network.UserService
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -28,7 +29,7 @@ class UserInfoActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         lifecycleScope.launch {
-            val userInfo = Api.UserService.getInfo().body()!!
+            val userInfo = Api.INSTANCE.userService.getInfo().body()!!
             val myFirstName = findViewById<EditText>(R.id.FirstNameInput)
             myFirstName.setText(userInfo.firstName)
             val myLastName = findViewById<EditText>(R.id.LastNameInput)
@@ -68,7 +69,7 @@ class UserInfoActivity : AppCompatActivity() {
                     lastName = myLastName.text.toString()
             )
             lifecycleScope.launch {
-                Api.UserService.update(newUserInfo)
+                Api.INSTANCE.userService.update(newUserInfo)
             }
 
             finish()
@@ -134,7 +135,7 @@ class UserInfoActivity : AppCompatActivity() {
 
     private fun handleImage(photoUri: Uri) {
         lifecycleScope.launch {
-            Api.INSTANCE.tasksWebService.updateAvatar(convert(photoUri))
+            Api.INSTANCE.userService.updateAvatar(convert(photoUri))
             val myImage = findViewById<ImageView>(R.id.image_view)
             myImage?.load(photoUri)
         }
