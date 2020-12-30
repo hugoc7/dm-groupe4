@@ -29,7 +29,7 @@ class UserInfoActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         lifecycleScope.launch {
-            val userInfo = Api.userService.getInfo().body()!!
+            val userInfo = Api.INSTANCE.userService.getInfo().body()!!
             val myFirstName = findViewById<EditText>(R.id.FirstNameInput)
             myFirstName.setText(userInfo.firstName)
             val myLastName = findViewById<EditText>(R.id.LastNameInput)
@@ -69,7 +69,7 @@ class UserInfoActivity : AppCompatActivity() {
                     lastName = myLastName.text.toString()
             )
             lifecycleScope.launch {
-                tasksWebService.update(newUserInfo)
+                Api.INSTANCE.tasksWebService.update(newUserInfo)
             }
 
             finish()
