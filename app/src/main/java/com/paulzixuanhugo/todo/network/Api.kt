@@ -8,7 +8,8 @@ import com.paulzixuanhugo.todo.authentication.LoginForm
 import com.paulzixuanhugo.todo.authentication.LoginResponse
 import com.paulzixuanhugo.todo.authentication.SignUpForm
 import com.paulzixuanhugo.todo.authentication.SignUpResponse
-import com.paulzixuanhugo.todo.tasklist.Task
+import com.paulzixuanhugo.todo.task.Task
+import com.paulzixuanhugo.todo.userinfo.UserInfo
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -70,10 +71,19 @@ class Api(private val context: Context) {
 interface UserService {
     @GET("users/info")
     suspend fun getInfo(): Response<UserInfo>
+
     @POST("users/login")
     suspend fun login(@Body user: LoginForm): Response<LoginResponse>
+
     @POST("users/sign_up")
     suspend fun signup(@Body user: SignUpForm): Response<SignUpResponse>
+
+    @Multipart
+    @PATCH("users/update_avatar")
+    suspend fun updateAvatar(@Part avatar: MultipartBody.Part): Response<UserInfo>
+
+    @PATCH("users")
+    suspend fun update(@Body user: UserInfo): Response<UserInfo>
 }
 
 interface TasksWebService {
@@ -88,11 +98,4 @@ interface TasksWebService {
 
     @PATCH("tasks/{id}")
     suspend fun updateTask(@Body task: Task, @Path("id") id: String? = task.id): Response<Task>
-
-    @Multipart
-    @PATCH("users/update_avatar")
-    suspend fun updateAvatar(@Part avatar: MultipartBody.Part): Response<UserInfo>
-
-    @PATCH("users")
-    suspend fun update(@Body user: UserInfo): Response<UserInfo>
 }

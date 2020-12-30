@@ -1,6 +1,5 @@
 package com.paulzixuanhugo.todo.tasklist
 
-import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +7,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.paulzixuanhugo.todo.R
+import com.paulzixuanhugo.todo.task.Task
 import kotlin.properties.Delegates
 
 class TaskListAdapter() :

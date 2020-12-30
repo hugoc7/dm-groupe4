@@ -15,7 +15,7 @@
         android:theme="@style/Theme.TodoPaulZixuanHugo">
         <activity android:name=".userinfo.UserInfoActivity" />
         <activity
-            android:name=".AuthenticationActivity"
+            android:name=".authentication.AuthenticationActivity"
             android:label="@string/title_activity_authentication">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,7 +32,7 @@
 
         </activity>
 
-        <activity android:name=".tasklist.task.TaskActivity">
+        <activity android:name="com.paulzixuanhugo.todo.task.TaskActivity">
 
         </activity>
 

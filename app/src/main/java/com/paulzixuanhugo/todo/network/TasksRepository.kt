@@ -1,6 +1,6 @@
 package com.paulzixuanhugo.todo.network
 
-import com.paulzixuanhugo.todo.tasklist.Task
+import com.paulzixuanhugo.todo.task.Task
 
 
 class TasksRepository {
@@ -22,7 +22,7 @@ class TasksRepository {
         tasksWebService.createTask(task)
     }
 
-    suspend fun updateTask(task:Task) {
+    suspend fun updateTask(task: Task) {
         tasksWebService.updateTask(task)
 
         // Solution alternative pour eviter de refresh, a mettre a jour avec la nouvelle archi

@@ -21,7 +21,8 @@ import com.paulzixuanhugo.todo.MainActivity
 import com.paulzixuanhugo.todo.R
 import com.paulzixuanhugo.todo.network.Api
 import com.paulzixuanhugo.todo.network.TasksRepository
-import com.paulzixuanhugo.todo.tasklist.task.TaskActivity
+import com.paulzixuanhugo.todo.task.Task
+import com.paulzixuanhugo.todo.task.TaskActivity
 import com.paulzixuanhugo.todo.userinfo.UserInfoActivity
 import kotlinx.coroutines.launch
 

@@ -1,7 +1,8 @@
-package com.paulzixuanhugo.todo
+package com.paulzixuanhugo.todo.authentication
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.paulzixuanhugo.todo.R
 
 
 class AuthenticationActivity : AppCompatActivity() {

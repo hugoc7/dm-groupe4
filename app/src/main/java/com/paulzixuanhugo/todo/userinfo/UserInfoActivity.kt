@@ -22,14 +22,13 @@ import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
-import com.paulzixuanhugo.todo.network.UserInfo
 
 class UserInfoActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
         lifecycleScope.launch {
-            val userInfo = Api.userService.getInfo().body()!!
+            val userInfo = Api.UserService.getInfo().body()!!
             val myFirstName = findViewById<EditText>(R.id.FirstNameInput)
             myFirstName.setText(userInfo.firstName)
             val myLastName = findViewById<EditText>(R.id.LastNameInput)
@@ -69,7 +68,7 @@ class UserInfoActivity : AppCompatActivity() {
                     lastName = myLastName.text.toString()
             )
             lifecycleScope.launch {
-                tasksWebService.update(newUserInfo)
+                Api.UserService.update(newUserInfo)
             }
 
             finish()

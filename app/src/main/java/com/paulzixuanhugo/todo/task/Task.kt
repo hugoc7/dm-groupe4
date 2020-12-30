@@ -1,4 +1,4 @@
-package com.paulzixuanhugo.todo.tasklist
+package com.paulzixuanhugo.todo.task
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
