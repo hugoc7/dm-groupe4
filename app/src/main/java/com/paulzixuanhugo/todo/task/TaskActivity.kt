@@ -1,14 +1,10 @@
-package com.paulzixuanhugo.todo.tasklist.task
+package com.paulzixuanhugo.todo.task
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
-import com.paulzixuanhugo.todo.R
 import androidx.appcompat.app.AppCompatActivity
-import com.paulzixuanhugo.todo.tasklist.Task
+import com.paulzixuanhugo.todo.R
 import java.util.UUID
 
 class TaskActivity : AppCompatActivity() {
@@ -17,7 +13,7 @@ class TaskActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.task_activity)
         val newTitle = this.findViewById<EditText>(R.id.titleInput)
-        val newDesc  = this.findViewById<EditText>(R.id.descriptionInput)
+        val newDesc = this.findViewById<EditText>(R.id.descriptionInput)
 
         val taskToEdit = intent.getSerializableExtra(TASK_KEY) as? Task
         val textToAdd = intent.getSerializableExtra(TEXT_KEY) as? String

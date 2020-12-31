@@ -4,18 +4,10 @@ import android.content.Context
 import androidx.preference.PreferenceManager
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.paulzixuanhugo.todo.SHARED_PREF_TOKEN_KEY
-import com.paulzixuanhugo.todo.authentication.LoginForm
-import com.paulzixuanhugo.todo.authentication.LoginResponse
-import com.paulzixuanhugo.todo.authentication.SignUpForm
-import com.paulzixuanhugo.todo.authentication.SignUpResponse
-import com.paulzixuanhugo.todo.tasklist.Task
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
-import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.http.*
 
 class Api(private val context: Context) {
     companion object {
@@ -24,7 +16,7 @@ class Api(private val context: Context) {
         lateinit var INSTANCE: Api
     }
 
-    fun getToken () : String? {
+    fun getToken(): String? {
         return PreferenceManager.getDefaultSharedPreferences(context).getString(SHARED_PREF_TOKEN_KEY, "")
     }
 
@@ -65,31 +57,4 @@ class Api(private val context: Context) {
     val tasksWebService: TasksWebService by lazy {
         retrofit.create(TasksWebService::class.java)
     }
-}
-
-interface UserService {
-    @GET("users/info")
-    suspend fun getInfo(): Response<UserInfo>
-    @POST("users/login")
-    suspend fun login(@Body user: LoginForm): Response<LoginResponse>
-    @POST("users/sign_up")
-    suspend fun signup(@Body user: SignUpForm): Response<SignUpResponse>
-}
-
-interface TasksWebService {
-    @GET("tasks")
-    suspend fun getTasks(): Response<List<Task>>
-
-    @DELETE("tasks/{id}")
-    suspend fun deleteTask(@Path("id") id: String?): Response<String>
-
-    @POST("tasks")
-    suspend fun createTask(@Body task: Task): Response<Task>
-
-    @PATCH("tasks/{id}")
-    suspend fun updateTask(@Body task: Task, @Path("id") id: String? = task.id): Response<Task>
-
-    @Multipart
-    @PATCH("users/update_avatar")
-    suspend fun updateAvatar(@Part avatar: MultipartBody.Part): Response<UserInfo>
 }

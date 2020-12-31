@@ -21,7 +21,8 @@ import com.paulzixuanhugo.todo.MainActivity
 import com.paulzixuanhugo.todo.R
 import com.paulzixuanhugo.todo.network.Api
 import com.paulzixuanhugo.todo.network.TasksRepository
-import com.paulzixuanhugo.todo.tasklist.task.TaskActivity
+import com.paulzixuanhugo.todo.task.Task
+import com.paulzixuanhugo.todo.task.TaskActivity
 import com.paulzixuanhugo.todo.userinfo.UserInfoActivity
 import kotlinx.coroutines.launch
 
@@ -51,16 +52,15 @@ class TaskListFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         viewModel.refreshTasks()
         return inflater.inflate(R.layout.fragment_task_list, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?)
-    {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val mainActivity = activity as MainActivity
 
 
@@ -73,16 +73,15 @@ class TaskListFragment : Fragment() {
         val addOrEditTask = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             val task = it.data!!.getSerializableExtra(TaskActivity.TASK_KEY) as Task
             lifecycleScope.launch {
-                if(it.resultCode == TaskActivity.ADD_TASK_REQUEST_CODE) {
+                if (it.resultCode == TaskActivity.ADD_TASK_REQUEST_CODE) {
                     viewModel.addTask(task)
-                }
-                else if (it.resultCode == TaskActivity.EDIT_TASK_REQUEST_CODE) {
+                } else if (it.resultCode == TaskActivity.EDIT_TASK_REQUEST_CODE) {
                     viewModel.editTask(task)
                 }
             }
         }
         //receive text intent from another application
-        if(mainActivity.intent?.action == Intent.ACTION_SEND) {
+        if (mainActivity.intent?.action == Intent.ACTION_SEND) {
             if ("text/plain" == mainActivity.intent.type) {
                 val text = mainActivity.intent.getStringExtra(Intent.EXTRA_TEXT).toString()
                 val intent = Intent(activity, TaskActivity::class.java)
@@ -92,7 +91,7 @@ class TaskListFragment : Fragment() {
         }
 
         val fab = view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
-        fab.setOnClickListener{
+        fab.setOnClickListener {
             val intent = Intent(activity, TaskActivity::class.java)
             addOrEditTask.launch(intent)
         }
@@ -121,8 +120,8 @@ class TaskListFragment : Fragment() {
             startActivity(shareIntent)
         }
 
-        val myImage = view?.findViewById<ImageView>(R.id.imageView)
-        myImage.setOnClickListener() {
+        val myImage = view.findViewById<ImageView>(R.id.imageView)
+        myImage.setOnClickListener {
             val intent = Intent(activity, UserInfoActivity::class.java)
             startActivity(intent)
         }

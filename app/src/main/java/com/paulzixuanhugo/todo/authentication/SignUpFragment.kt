@@ -21,9 +21,9 @@ import kotlinx.coroutines.launch
 
 class SignUpFragment : Fragment() {
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_signup, container, false)
     }
@@ -44,27 +44,27 @@ class SignUpFragment : Fragment() {
             val firstname = firstnameInput.text.toString()
             val lastname = lastnameInput.text.toString()
 
-            if (email != "" && password != "" && confirmPassword != "" && firstname != "" && lastname != "")
-            {
+            if (email != "" && password != "" && confirmPassword != "" && firstname != "" && lastname != "") {
                 if (password == confirmPassword) {
-                    val signupForm = SignUpForm(firstname, lastname, email, password, confirmPassword)
-                    lifecycleScope.launch {
-                        val res = userWebService.signup(signupForm)
-                        if (res.isSuccessful) {
-                            val token = res.body()?.token
-                            PreferenceManager.getDefaultSharedPreferences(context).edit {
-                                putString(SHARED_PREF_TOKEN_KEY, token)
-                            }
-                            val intent = Intent(activity, MainActivity::class.java)
-                            startActivity(intent)
-                        } else
-                            Toast.makeText(context, "Problème lors de la demande de sign up !", Toast.LENGTH_LONG).show()
-                    }
-                }
-                else
+                    if (password.length > 5) {
+                        val signupForm = SignUpForm(firstname, lastname, email, password, confirmPassword)
+                        lifecycleScope.launch {
+                            val res = userWebService.signup(signupForm)
+                            if (res.isSuccessful) {
+                                val token = res.body()?.token
+                                PreferenceManager.getDefaultSharedPreferences(context).edit {
+                                    putString(SHARED_PREF_TOKEN_KEY, token)
+                                }
+                                val intent = Intent(activity, MainActivity::class.java)
+                                startActivity(intent)
+                            } else
+                                Toast.makeText(context, "Problème lors de la demande de sign up !", Toast.LENGTH_LONG).show()
+                        }
+                    } else
+                        Toast.makeText(context, "Les mots de passe doivent contenir au moins 6 charactères !", Toast.LENGTH_LONG).show()
+                } else
                     Toast.makeText(context, "Les mots de passe doivent correspondre !", Toast.LENGTH_LONG).show()
-            }
-            else
+            } else
                 Toast.makeText(context, "Vous devez remplir tous les champs !", Toast.LENGTH_LONG).show()
         }
     }

@@ -1,11 +1,10 @@
 package com.paulzixuanhugo.todo.network
 
-import com.paulzixuanhugo.todo.tasklist.Task
+import com.paulzixuanhugo.todo.task.Task
 
 
 class TasksRepository {
     private val tasksWebService = Api.INSTANCE.tasksWebService
-
 
 
     suspend fun refresh(): List<Task>? {
@@ -18,12 +17,12 @@ class TasksRepository {
         return null
     }
 
-    suspend fun createTaskOnline(task: Task){
+    suspend fun createTaskOnline(task: Task) {
         tasksWebService.createTask(task)
     }
 
-    suspend fun updateTask(task:Task) {
-        val response = tasksWebService.updateTask(task)
+    suspend fun updateTask(task: Task) {
+        tasksWebService.updateTask(task)
 
         // Solution alternative pour eviter de refresh, a mettre a jour avec la nouvelle archi
         /*val editableList = viewModel.taskList.value.orEmpty().toMutableList()
@@ -34,7 +33,7 @@ class TasksRepository {
     }
 
     suspend fun delete(id: String) {
-        val tasksResponse = tasksWebService.deleteTask(id)
+        tasksWebService.deleteTask(id)
 
         // Solution alternative pour eviter de refresh, a mettre a jour avec la nouvelle archi
         /*if (tasksResponse.isSuccessful) {

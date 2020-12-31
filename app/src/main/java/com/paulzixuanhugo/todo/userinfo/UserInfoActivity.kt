@@ -3,16 +3,19 @@ package com.paulzixuanhugo.todo.userinfo
 import android.Manifest
 import android.app.AlertDialog
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.launch
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
+import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
+import coil.load
+import com.paulzixuanhugo.todo.BuildConfig
 import com.paulzixuanhugo.todo.R
 import com.paulzixuanhugo.todo.network.Api
 import kotlinx.coroutines.launch
@@ -21,6 +24,22 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 
 class UserInfoActivity : AppCompatActivity() {
+
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch {
+            val userInfo = Api.INSTANCE.userService.getInfo().body()!!
+            val myFirstName = findViewById<EditText>(R.id.FirstNameInput)
+            myFirstName.setText(userInfo.firstName)
+            val myLastName = findViewById<EditText>(R.id.LastNameInput)
+            myLastName.setText(userInfo.lastName)
+            val myeMail = findViewById<EditText>(R.id.emailInput)
+            myeMail.setText(userInfo.email)
+            val myImage = findViewById<ImageView>(R.id.image_view)
+            myImage?.load(userInfo.avatar)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.userinfo)
@@ -28,6 +47,31 @@ class UserInfoActivity : AppCompatActivity() {
         val takePictureButton = findViewById<Button>(R.id.take_picture_button)
         takePictureButton.setOnClickListener {
             askCameraPermissionAndOpenCamera()
+        }
+
+        val pickPictureButton = findViewById<Button>(R.id.upload_image_button)
+        pickPictureButton.setOnClickListener {
+            pickInGallery.launch("image/*")
+        }
+
+        val valider = findViewById<Button>(R.id.validerUI)
+        valider.setOnClickListener {
+
+            val myFirstName = findViewById<EditText>(R.id.FirstNameInput)
+            val myLastName = findViewById<EditText>(R.id.LastNameInput)
+            val myeMail = findViewById<EditText>(R.id.emailInput)
+            val myImage = findViewById<ImageView>(R.id.image_view)
+
+            val newUserInfo = UserInfo(
+                    email = myeMail.text.toString(),
+                    firstName = myFirstName.text.toString(),
+                    lastName = myLastName.text.toString()
+            )
+            lifecycleScope.launch {
+                Api.INSTANCE.userService.update(newUserInfo)
+            }
+
+            finish()
         }
     }
 
@@ -60,17 +104,25 @@ class UserInfoActivity : AppCompatActivity() {
         }
     }
 
+    // create a temp file and get a uri for it
+    private val photoUri by lazy {
+        FileProvider.getUriForFile(
+                this,
+                BuildConfig.APPLICATION_ID + ".fileprovider",
+                File.createTempFile("avatar", ".jpeg", externalCacheDir)
+
+        )
+    }
+
     // register
-    private val takePicture = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
-        val tmpFile = File.createTempFile("avatar", "jpeg")
-        tmpFile.outputStream().use {
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
-        }
-        handleImage(tmpFile.toUri())
+    private val takePicture = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+        if (success) {
+            handleImage(photoUri)
+        } else Toast.makeText(this, "Erreur ! 😢", Toast.LENGTH_LONG).show()
     }
 
     // use
-    private fun openCamera() = takePicture.launch()
+    private fun openCamera() = takePicture.launch(photoUri)
 
     // convert
     private fun convert(uri: Uri) =
@@ -82,7 +134,16 @@ class UserInfoActivity : AppCompatActivity() {
 
     private fun handleImage(photoUri: Uri) {
         lifecycleScope.launch {
-            Api.INSTANCE.tasksWebService.updateAvatar(convert(photoUri))
+            Api.INSTANCE.userService.updateAvatar(convert(photoUri))
+            val myImage = findViewById<ImageView>(R.id.image_view)
+            myImage?.load(photoUri)
         }
     }
+
+    // register
+    private val pickInGallery =
+            registerForActivityResult(ActivityResultContracts.GetContent()) { photoUri ->
+                handleImage(photoUri)
+            }
+
 }

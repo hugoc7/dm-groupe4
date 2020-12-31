@@ -1,4 +1,4 @@
-package com.paulzixuanhugo.todo.network
+package com.paulzixuanhugo.todo.userinfo
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -13,4 +13,4 @@ data class UserInfo(
         val lastName: String,
         @SerialName("avatar")
         val avatar: String = "https://i.imgur.com/Fy4YqZg.png"
-)
+) : java.io.Serializable

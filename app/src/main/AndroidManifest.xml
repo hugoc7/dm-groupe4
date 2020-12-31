@@ -3,6 +3,7 @@
     package="com.paulzixuanhugo.todo">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".App"
@@ -12,9 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TodoPaulZixuanHugo">
-        <activity android:name=".userinfo.UserInfoActivity"></activity>
+        <activity android:name=".userinfo.UserInfoActivity" />
         <activity
-            android:name=".AuthenticationActivity"
+            android:name=".authentication.AuthenticationActivity"
             android:label="@string/title_activity_authentication">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,9 +32,20 @@
 
         </activity>
 
-        <activity android:name=".tasklist.task.TaskActivity">
+        <activity android:name="com.paulzixuanhugo.todo.task.TaskActivity">
 
         </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
     </application>
 
 </manifest>
