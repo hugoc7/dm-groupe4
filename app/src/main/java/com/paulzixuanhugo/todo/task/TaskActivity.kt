@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.paulzixuanhugo.todo.R
@@ -23,9 +24,9 @@ class TaskActivity : AppCompatActivity() {
     private fun createAlarm(calendar: Calendar, task: Task) {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(this, AlarmReceiver::class.java)
-        intent.putExtra(TASK_KEY, task)
+        intent.putExtra(TaskBroadcastReceiver.TASK_ID, task.id)
         val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis , pendingIntent)
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, 2000 , pendingIntent)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,7 +93,7 @@ class TaskActivity : AppCompatActivity() {
                     dueDate = currentDueDate.time)
 
             //Setup alarme ici
-            print("alarm cree")
+            Log.e("hugo", "ALARM CREATION")
             createAlarm(currentDueDate, newTask)
 
             intent.putExtra(TASK_KEY, newTask)
