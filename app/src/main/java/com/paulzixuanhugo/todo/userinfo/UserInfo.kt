@@ -1,4 +1,4 @@
-package com.paulzixuanhugo.todo.network
+package com.paulzixuanhugo.todo.userinfo
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

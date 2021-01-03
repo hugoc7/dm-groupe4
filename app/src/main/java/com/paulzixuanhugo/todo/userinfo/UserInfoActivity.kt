@@ -22,7 +22,6 @@ import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
-import com.paulzixuanhugo.todo.network.UserInfo
 
 class UserInfoActivity : AppCompatActivity() {
 
@@ -69,7 +68,7 @@ class UserInfoActivity : AppCompatActivity() {
                     lastName = myLastName.text.toString()
             )
             lifecycleScope.launch {
-                Api.INSTANCE.tasksWebService.update(newUserInfo)
+                Api.INSTANCE.userService.update(newUserInfo)
             }
 
             finish()
@@ -135,7 +134,7 @@ class UserInfoActivity : AppCompatActivity() {
 
     private fun handleImage(photoUri: Uri) {
         lifecycleScope.launch {
-            Api.INSTANCE.tasksWebService.updateAvatar(convert(photoUri))
+            Api.INSTANCE.userService.updateAvatar(convert(photoUri))
             val myImage = findViewById<ImageView>(R.id.image_view)
             myImage?.load(photoUri)
         }

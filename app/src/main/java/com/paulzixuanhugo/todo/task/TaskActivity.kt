@@ -1,0 +1,96 @@
+package com.paulzixuanhugo.todo.task
+
+import android.os.Bundle
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import com.paulzixuanhugo.todo.R
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
+
+class TaskActivity : AppCompatActivity() {
+
+    private val timeFormatter = SimpleDateFormat("HH:mm", Locale.US)
+    private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.task_activity)
+        val newTitle = this.findViewById<EditText>(R.id.titleInput)
+        val newDesc = this.findViewById<EditText>(R.id.descriptionInput)
+        val newTime = this.findViewById<TextView>(R.id.timeInput)
+        val newDate = this.findViewById<TextView>(R.id.dateInput)
+        val editTimeButton = this.findViewById<ImageButton>(R.id.editTimeButton)
+        val editDateButton = this.findViewById<ImageButton>(R.id.editDateButton)
+
+
+        val taskToEdit = intent.getSerializableExtra(TASK_KEY) as? Task
+        val textToAdd = intent.getSerializableExtra(TEXT_KEY) as? String
+        var resultCode = ADD_TASK_REQUEST_CODE
+
+        //déprécié au profit de java.time, mais dispo seulement dans api 26
+        val currentDueDate = Calendar.getInstance()
+        val timePickerFragment = TimePickerFragment()
+        val datePickerFragment = DatePickerFragment()
+
+        if (textToAdd != null) {
+            newDesc.setText(textToAdd)
+        }
+        if (taskToEdit != null) {
+            resultCode = EDIT_TASK_REQUEST_CODE
+            newTitle.setText(taskToEdit.title)
+            newDesc.setText(taskToEdit.description)
+            currentDueDate.time = taskToEdit.dueDate
+            newTime.setText(timeFormatter.format(taskToEdit.dueDate))
+            newDate.setText(dateFormatter.format(taskToEdit.dueDate))
+        }
+
+        editTimeButton.setOnClickListener {
+            timePickerFragment.onTimeSetListener = { hours, minutes ->
+                currentDueDate.set(Calendar.HOUR_OF_DAY, hours)
+                currentDueDate.set(Calendar.MINUTE, minutes)
+                newTime.setText(timeFormatter.format(currentDueDate.time))
+            }
+            timePickerFragment.hours = currentDueDate.get(Calendar.HOUR_OF_DAY)
+            timePickerFragment.minutes = currentDueDate.get(Calendar.MINUTE)
+            timePickerFragment.show(supportFragmentManager, "timePicker")
+        }
+        editDateButton.setOnClickListener {
+            datePickerFragment.onDateSetListener = { day, month, year ->
+                currentDueDate.set(Calendar.DAY_OF_MONTH, day)
+                currentDueDate.set(Calendar.MONTH, month)
+                currentDueDate.set(Calendar.YEAR, year)
+                newDate.setText(dateFormatter.format(currentDueDate.time))
+            }
+            datePickerFragment.day = currentDueDate.get(Calendar.DAY_OF_MONTH)
+            datePickerFragment.month = currentDueDate.get(Calendar.MONTH)
+            datePickerFragment.year = currentDueDate.get(Calendar.YEAR)
+            datePickerFragment.show(supportFragmentManager, "datePicker")
+        }
+
+        val valider = this.findViewById<Button>(R.id.valider)
+        valider.setOnClickListener {
+
+            val newTask = Task(
+                    id = taskToEdit?.id ?: UUID.randomUUID().toString(),
+                    title = newTitle.text.toString(),
+                    description = newDesc.text.toString(),
+                    dueDate = currentDueDate.time)
+
+            intent.putExtra(TASK_KEY, newTask)
+            setResult(resultCode, intent)
+            finish()
+        }
+
+    }
+
+    companion object {
+        const val ADD_TASK_REQUEST_CODE = 666
+        const val EDIT_TASK_REQUEST_CODE = 667
+        const val TASK_KEY = "cle"
+        const val TEXT_KEY = "text"
+    }
+}
+

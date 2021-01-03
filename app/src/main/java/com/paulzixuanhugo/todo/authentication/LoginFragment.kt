@@ -21,9 +21,9 @@ import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
@@ -37,25 +37,21 @@ class LoginFragment : Fragment() {
         loginButton.setOnClickListener {
             val email = emailInput.text.toString()
             val password = passwordInput.text.toString()
-            if (email != "" && password != "")
-            {
+            if (email != "" && password != "") {
                 val loginForm = LoginForm(email, password)
                 lifecycleScope.launch {
                     val res = userWebService.login(loginForm)
-                    if(res.isSuccessful)
-                    {
+                    if (res.isSuccessful) {
                         val token = res.body()?.token
                         PreferenceManager.getDefaultSharedPreferences(context).edit {
                             putString(SHARED_PREF_TOKEN_KEY, token)
                         }
                         val intent = Intent(activity, MainActivity::class.java)
                         startActivity(intent)
-                    }
-                    else
+                    } else
                         Toast.makeText(context, "Problème lors de la demande de login !", Toast.LENGTH_LONG).show()
                 }
-            }
-            else
+            } else
                 Toast.makeText(context, "Vous devez remplir tous les champs !", Toast.LENGTH_LONG).show()
         }
     }
