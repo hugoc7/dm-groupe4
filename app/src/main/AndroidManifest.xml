@@ -46,6 +46,11 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <receiver
+            android:name=".notification.AlarmReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
     </application>
 
 </manifest>

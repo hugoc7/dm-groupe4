@@ -1,9 +1,14 @@
 package com.paulzixuanhugo.todo.task
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.paulzixuanhugo.todo.R
+import com.paulzixuanhugo.todo.notification.AlarmReceiver
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -14,6 +19,13 @@ class TaskActivity : AppCompatActivity() {
 
     private val timeFormatter = SimpleDateFormat("HH:mm", Locale.US)
     private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+
+    private fun createAlarm(calendar: Calendar) {
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(this, AlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis , pendingIntent)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,6 +90,9 @@ class TaskActivity : AppCompatActivity() {
                     title = newTitle.text.toString(),
                     description = newDesc.text.toString(),
                     dueDate = currentDueDate.time)
+
+            //Setup alarme ici
+            createAlarm(currentDueDate)
 
             intent.putExtra(TASK_KEY, newTask)
             setResult(resultCode, intent)
