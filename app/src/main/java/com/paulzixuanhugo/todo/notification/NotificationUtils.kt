@@ -13,6 +13,8 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.paulzixuanhugo.todo.MainActivity
 import com.paulzixuanhugo.todo.R
+import com.paulzixuanhugo.todo.task.Task
+import com.paulzixuanhugo.todo.task.TaskBroadcastReceiver
 
 class  NotificationUtils(base: Context) : ContextWrapper(base) {
 
@@ -42,18 +44,27 @@ class  NotificationUtils(base: Context) : ContextWrapper(base) {
         return manager as NotificationManager
     }
 
-    fun getNotificationBuilder(): NotificationCompat.Builder {
-        val intent = Intent(this, MainActivity::class.java).apply {
+    fun getNotificationBuilder(task: Task): NotificationCompat.Builder {
+        val editIntent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+        val editPendingIntent = PendingIntent.getActivity(this, 0, editIntent, 0)
+
+        val deleteIntent = Intent(this, TaskBroadcastReceiver::class.java).apply {
+            action = TaskBroadcastReceiver.MARK_TASK_AS_DONE
+            putExtra(TaskBroadcastReceiver.TASK_ID, task.id)
+        }
+        val deletePendingIntent: PendingIntent =
+                PendingIntent.getBroadcast(this, 0, deleteIntent, 0)
+
         return NotificationCompat.Builder(applicationContext, MYCHANNEL_ID)
                 .setContentTitle("Alarm!")
-                .setContentText("Your AlarmManager is working.")
+                .setContentText(task.title)
                 .setSmallIcon(R.drawable.material_ic_calendar_black_24dp)
                 .setColor(Color.YELLOW)
-                .setContentIntent(pendingIntent)
+                .setContentIntent(editPendingIntent)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setAutoCancel(true)
+                .addAction(android.R.drawable.ic_input_delete, "Mark as Done", deletePendingIntent)
     }
 }

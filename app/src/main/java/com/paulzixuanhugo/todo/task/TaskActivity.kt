@@ -20,9 +20,10 @@ class TaskActivity : AppCompatActivity() {
     private val timeFormatter = SimpleDateFormat("HH:mm", Locale.US)
     private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.US)
 
-    private fun createAlarm(calendar: Calendar) {
+    private fun createAlarm(calendar: Calendar, task: Task) {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(this, AlarmReceiver::class.java)
+        intent.putExtra(TASK_KEY, task)
         val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis , pendingIntent)
     }
@@ -58,7 +59,6 @@ class TaskActivity : AppCompatActivity() {
             newTime.setText(timeFormatter.format(taskToEdit.dueDate))
             newDate.setText(dateFormatter.format(taskToEdit.dueDate))
         }
-
         editTimeButton.setOnClickListener {
             timePickerFragment.onTimeSetListener = { hours, minutes ->
                 currentDueDate.set(Calendar.HOUR_OF_DAY, hours)
@@ -92,7 +92,8 @@ class TaskActivity : AppCompatActivity() {
                     dueDate = currentDueDate.time)
 
             //Setup alarme ici
-            createAlarm(currentDueDate)
+            print("alarm cree")
+            createAlarm(currentDueDate, newTask)
 
             intent.putExtra(TASK_KEY, newTask)
             setResult(resultCode, intent)
