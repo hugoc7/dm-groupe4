@@ -14,7 +14,7 @@ class AuthenticationActivity : AppCompatActivity() {
         setContentView(R.layout.activity_authentication)
 
         val token = PreferenceManager.getDefaultSharedPreferences(this).getString(SHARED_PREF_TOKEN_KEY, "")
-        if (token != null)
+        if (token != null && token != "")
         {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
