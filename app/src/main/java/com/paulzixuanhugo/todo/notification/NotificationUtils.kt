@@ -10,6 +10,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.media.RingtoneManager
 import android.os.Build
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.paulzixuanhugo.todo.MainActivity
 import com.paulzixuanhugo.todo.R
@@ -45,17 +46,21 @@ class  NotificationUtils(base: Context) : ContextWrapper(base) {
     }
 
     fun getNotificationBuilder(task: Task): NotificationCompat.Builder {
-        val editIntent = Intent(this, MainActivity::class.java).apply {
+
+        Log.e("TASK ID 3", task.id)
+        Log.e("TASK ID 3", task.title)
+
+        var editIntent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-        val editPendingIntent = PendingIntent.getActivity(this, 0, editIntent, 0)
+        var editPendingIntent = PendingIntent.getActivity(this, 0, editIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        val deleteIntent = Intent(this, TaskBroadcastReceiver::class.java).apply {
+        var deleteIntent = Intent(this, TaskBroadcastReceiver::class.java).apply {
             action = TaskBroadcastReceiver.MARK_TASK_AS_DONE
             putExtra(TaskBroadcastReceiver.TASK_ID, task.id)
         }
-        val deletePendingIntent: PendingIntent =
-                PendingIntent.getBroadcast(this, 0, deleteIntent, 0)
+        var deletePendingIntent: PendingIntent =
+                PendingIntent.getBroadcast(this, 0, deleteIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         return NotificationCompat.Builder(applicationContext, MYCHANNEL_ID)
                 .setContentTitle("Alarm!")

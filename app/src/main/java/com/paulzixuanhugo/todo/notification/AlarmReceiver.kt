@@ -3,6 +3,7 @@ package com.paulzixuanhugo.todo.notification
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.os.Debug
 import android.util.Log
 import com.paulzixuanhugo.todo.network.TasksRepository
@@ -18,20 +19,18 @@ class AlarmReceiver : BroadcastReceiver() {
     private val tasksRepository = TasksRepository()
     override fun onReceive(context: Context, intent: Intent) {
         //This method is called when the BroadcastReceiver is receiving an Intent broadcast.
-        val taskId = intent.getStringExtra(TaskBroadcastReceiver.TASK_ID)
+        var taskId = intent.getStringExtra("task_id")
 
         if (taskId == null)
             return
-        Log.e("TASK ID", taskId)
-       // Log.e("TASK TITLE", taskTitle)
 
         GlobalScope.launch{
-            val tasks = tasksRepository.refresh()
+            var tasks = tasksRepository.refresh()
             if (tasks != null) {
                 for (task in tasks) {
-                    if (task.id == taskId) {
-                        val notificationUtils = NotificationUtils(context)
-                        val notification = notificationUtils.getNotificationBuilder(task).build()
+                    if (task.title == taskId) {
+                        var notificationUtils = NotificationUtils(context)
+                        var notification = notificationUtils.getNotificationBuilder(task).build()
                         notificationUtils.getManager().notify(150, notification)
                     }
                 }

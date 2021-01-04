@@ -6,14 +6,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.paulzixuanhugo.todo.R
 import com.paulzixuanhugo.todo.notification.AlarmReceiver
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 class TaskActivity : AppCompatActivity() {
@@ -21,12 +21,15 @@ class TaskActivity : AppCompatActivity() {
     private val timeFormatter = SimpleDateFormat("HH:mm", Locale.US)
     private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.US)
 
-    private fun createAlarm(calendar: Calendar, task: Task) {
+    private fun createAlarm(calendar: Calendar, taskid : String) {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(this, AlarmReceiver::class.java)
-        intent.putExtra(TaskBroadcastReceiver.TASK_ID, task.id)
-        val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, 2000 , pendingIntent)
+        val notifyIntent = Intent(this, AlarmReceiver::class.java)
+        notifyIntent.putExtra(TaskActivity.TASK_ID, taskid)
+        Log.e("TASK ID", taskid)
+        notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or
+                Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        val pendingNotifyIntent = PendingIntent.getBroadcast(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, 2000 , pendingNotifyIntent)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,8 +96,8 @@ class TaskActivity : AppCompatActivity() {
                     dueDate = currentDueDate.time)
 
             //Setup alarme ici
-            Log.e("hugo", "ALARM CREATION")
-            createAlarm(currentDueDate, newTask)
+            Log.e("ALARM CREATION",newTask.id)
+            createAlarm(currentDueDate, newTask.title)
 
             intent.putExtra(TASK_KEY, newTask)
             setResult(resultCode, intent)
@@ -108,6 +111,7 @@ class TaskActivity : AppCompatActivity() {
         const val EDIT_TASK_REQUEST_CODE = 667
         const val TASK_KEY = "cle"
         const val TEXT_KEY = "text"
+        const val TASK_ID = "task_id"
     }
 }
 
